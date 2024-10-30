@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 public class Driver 
 {
     // A static variable to track the player's current location in the game
@@ -6,19 +7,9 @@ public class Driver
     
     public static void main(String [] args)
     {
-        // Assign the currLocation variable to “point” at a new Location object
-        currLocation = new Location("Kitchen", "A dark kitchen whose lights are flickering currently has the following items:");
+        // Creating the game world 
+        createWorld();
         
-        // Create items
-        Item knife = new Item("Knife", "Tool", "A sharp kitchen knife");
-        Item turkey = new Item("Turkey", "Food", "A roasted turkey");
-        Item plate = new Item("Plate", "Dishware", "A dirty white plate");
-
-        // Add the created items to the current location
-        currLocation.addItem(plate);
-        currLocation.addItem(knife);
-        currLocation.addItem(turkey);
-
         // Create a Scanner object to read its data from the standard input stream
         Scanner read = new Scanner(System.in);
 
@@ -42,6 +33,42 @@ public class Driver
                     read.close();
                     System.exit(0);
                 }
+
+                // If the user types go
+                case "go":
+                if (cmdLine.length == 1) // no direction specify
+                {
+                    System.out.println("Please specify a direction (north, south, east, or west) to go.");
+                }
+                else if (cmdLine.length > 1) {
+                    String direction = cmdLine[1].toLowerCase();
+
+                    ArrayList<String> validDirection = new ArrayList<String>();
+                    validDirection.add("north");
+                    validDirection.add("west");
+                    validDirection.add("south");
+                    validDirection.add("east");
+
+                    if (!validDirection.contains(direction)) // handle direction that is north, south, east, west
+                    {
+                        System.out.println("Invalid direction. Please use north, south, east, or west.");
+                    }
+                    else
+                    {
+                        Location newLocation = currLocation.getLocation(direction);
+
+                        if (newLocation == null) // no path
+                        {
+                            System.out.println("There is no path in that direction.");
+                        }
+                        else
+                        {
+                            currLocation = newLocation;
+                            System.out.println("You move to: " + currLocation.getName());
+                        }
+                    }
+                }
+                break;
                 
             
                 // If the user types look, it displays the current location's description and items
@@ -89,5 +116,71 @@ public class Driver
                 }
             }
         }
-    }       
+    }   
+    
+    /**
+     * Creates the game world by constructing and connecting locations.
+     * Initializes the starting location for the player.
+     */
+    public static void createWorld() 
+    {
+        // Create locations
+        Location kitchen = new Location("Kitchen", "A dark, cold kitchen with flickering lights. The smell of burnt food lingers.");
+        Location hallway = new Location("Hallway", "A narrow, dim hallway. Faint whispers seem to bounce back from the shadows.");
+        Location bedroom = new Location("Bedroom", "A messy room with bloody blankets. Someone might be watching you.");
+        Location livingRoom = new Location("Living Room", "An empty room with a broken TV. The silence is deep and cold.");
+
+        // Connect locations 
+        kitchen.connect("north", hallway);
+        hallway.connect("south", kitchen);
+        hallway.connect("east", bedroom);
+        bedroom.connect("west", hallway);
+        bedroom.connect("south", livingRoom);
+        livingRoom.connect("north", bedroom);
+        kitchen.connect("east", livingRoom);
+        livingRoom.connect("west", kitchen);
+
+        // Add items in the kitchen
+        Item knife = new Item("Knife", "Tool", "A kitchen knife with dry blood on its blade.");
+        Item meat = new Item("Meat", "Food", "A piece of burnt meat with a bad smell.");
+        Item plate = new Item("Plate", "Dishware", "A broken plate with dark stains.");
+        Item pot = new Item("Pot", "Cookware", "An old pot with black stuff stuck inside.");
+        Item spoon = new Item("Spoon", "Utensil", "A spoon, bent and scratched like someone crushed it.");
+
+        kitchen.addItem(plate);
+        kitchen.addItem(knife);
+        kitchen.addItem(meat);
+        kitchen.addItem(pot);
+        kitchen.addItem(spoon);
+
+        // Add items in the hallway
+        Item key = new Item("Key", "Tool", "An old, cold, rusty key with some dried blood spots.");
+        Item umbrella = new Item("Umbrella", "Accessory", "An umbrella with rips and faint blood spots.");
+        Item coat = new Item("Coat", "Clothing", "A thick coat covered in dust.");
+
+        hallway.addItem(key);
+        hallway.addItem(umbrella);
+        hallway.addItem(coat);
+
+        // Add items in the bedroom
+        Item pillow = new Item("Pillow", "Bedding", "A pillow with faint red marks.");
+        Item diary = new Item("Diary", "Reading Material", "A diary with some ripped and missing pages. The writing is messy.");
+        Item lamp = new Item("Lamp", "Furniture", "A lamp that flickers. The light from the lamp is weak and uneven.");
+
+        bedroom.addItem(pillow);
+        bedroom.addItem(diary);
+        bedroom.addItem(lamp);
+
+        // Add items in the living room
+        Item remote = new Item("Remote", "Electronics", "A remote for the TV, covered in dust.");
+        Item magazine = new Item("Magazine", "Reading Material", "An old magazine with ripped pages.");
+        Item cushion = new Item("Cushion", "Furniture", "A red cushion with strange marks on it.");
+
+        livingRoom.addItem(remote);
+        livingRoom.addItem(magazine);
+        livingRoom.addItem(cushion);
+
+        // Set the player's starting location to the kitchen
+        currLocation = kitchen;
+    }
 }
