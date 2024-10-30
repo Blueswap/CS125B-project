@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Location 
 {
@@ -7,10 +8,12 @@ public class Location
      * name: a String represents the location’s name 
      * description: a String represents the location’s description
      * items: an ArrayList that stores Item objects in the location
+     * connections: a HashMap that stores directions and connected locations
      */
     private String name; 
     private String description;
     private ArrayList<Item> items;
+    private HashMap <String, Location> connections;
 
     // Constructor
     /**
@@ -24,6 +27,7 @@ public class Location
         name = pName;
         description = pDescription;
         items = new ArrayList<Item>();
+        connections = new HashMap<String, Location>();
     }
 
     // Methods
@@ -148,5 +152,41 @@ public class Location
             }
         }
         return null;
+    }
+
+    /**
+     *  This method connects this location to another location in the specified direction.
+     * @param direction The direction to connect (e.g., "north").
+     * @param location The Location object to connect to.
+     */
+    public void connect(String direction, Location location)
+    {
+        connections.put(direction.toLowerCase(), location);
+    }
+
+    /**
+     * This method checks if there is a location in the specified direction.
+     * @param direction The direction to check (e.g., "north").
+     * @return true if there is a connected location in that direction; false otherwise.
+     */
+    public boolean canMove(String direction)
+    {
+        return connections.containsKey(direction.toLowerCase());
+    }
+
+    /**
+     * This method gets the location connected in the specified direction.
+     * @param direction The direction to get the location for (e.g., "north").
+     * @return The Location object connected in the specified direction, or null if none exists.
+     */
+    public Location getLocation(String direction) 
+    {
+        if (canMove(direction) == true){
+            return connections.get(direction);
+        } 
+        else
+        {
+            return null;
+        }
     }
 }
