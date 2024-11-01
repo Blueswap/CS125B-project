@@ -15,7 +15,7 @@ public class ContainerItem extends Item
 
     // Constructor
     /**
-     * Constructs a new Item object from name, type, and description inherits from Item class
+     * Constructs a new ContainerItem object from name, type, and description inherits from Item class
      * @param pName the name of the item inherits from Item class
      * @param pType the type of the item inherits from Item class
      * @param pDescription the description of the item inherits from Item class
