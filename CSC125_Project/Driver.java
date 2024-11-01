@@ -1,5 +1,13 @@
+/**
+ * The Driver class is the main driver for the text-based adventure game
+ * It manages user commands, player movement, item interactions, and displays game world details
+ * 
+ * @author Quyen Tran, Hung Nguyen, Nhi Do, Quynh Tran
+ */
+
 import java.util.Scanner;
 import java.util.ArrayList;
+
 public class Driver 
 {
     // A static variable to track the player's current location in the game
@@ -44,6 +52,7 @@ public class Driver
                 else if (cmdLine.length > 1) {
                     String direction = cmdLine[1].toLowerCase();
 
+                    // list of valid directions
                     ArrayList<String> validDirection = new ArrayList<String>();
                     validDirection.add("north");
                     validDirection.add("west");
@@ -64,7 +73,7 @@ public class Driver
                         }
                         else
                         {
-                            currLocation = newLocation;
+                            currLocation = newLocation; // update current location
                             System.out.println("You move to: " + currLocation.getName());
                         }
                     }
@@ -109,12 +118,15 @@ public class Driver
                     break;
                 }
 
+                // If the user types inventory, it shows items in player's inventory
                 case "inventory":
                 {
                     System.out.println(myInventory.toString());
                     break;
                 }
 
+                // If the user types take, it adds an item from the current location to the player's inventory
+                // It also remove that item from the current location
                 case "take":
                 {
                     if (cmdLine.length == 1)
@@ -139,6 +151,7 @@ public class Driver
                     break;
                 }
 
+                // If the user types drop, it removes an item from the player's inventory and leave it at the current location
                 case "drop":
                 {
                     if (cmdLine.length == 1)
@@ -159,6 +172,7 @@ public class Driver
                     break;
                 }
 
+                // If the user types help, it displays available commands
                 case "help":
                 {
                     helper();
@@ -176,6 +190,9 @@ public class Driver
     }   
     
     
+    /**
+     * This method displays a list of available commands for the player.
+     */
     public static void helper()
     {
         System.out.println("quit : close the game");
