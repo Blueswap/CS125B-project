@@ -126,10 +126,15 @@ public class Driver
                         String item = cmdLine[1];
                         if(currLocation.hasItem(item))
                         {
-                            myInventory.addItem(currLocation.getItem(item));
+                            Item itemName = currLocation.getItem(item);
+                            myInventory.addItem(itemName);
                             currLocation.removeItem(item);
+                            System.out.println("Now you have item: " + itemName.getName());
                         }
-                        else System.out.println("Cannot find that item here.");
+                        else
+                        {
+                            System.out.println("Cannot find that item here.");
+                        }
                     }
                     break;
                 }
@@ -145,7 +150,9 @@ public class Driver
                         String item = cmdLine[1];
                         if(myInventory.hasItem(item))
                         {
-                            currLocation.addItem(myInventory.removeItem(item));
+                            Item itemName = myInventory.removeItem(item); 
+                            currLocation.addItem(itemName);
+                            System.out.println("You have drop " + itemName.getName());
                         }
                         else System.out.println("Cannot find that item in your inventory.");
                     }
@@ -157,6 +164,7 @@ public class Driver
                     helper();
                     break;
                 }
+
                 // Default case to handle unknown commands
                 default:
                 {
@@ -171,7 +179,7 @@ public class Driver
     public static void helper()
     {
         System.out.println("quit : close the game");
-        System.out.println("go NAME: move to another place" );
+        System.out.println("go DIRECTION: move to another place" );
         System.out.println("look: displays the current location's description and items");
         System.out.println("examine NAME: examine a specific item");
         System.out.println("inventory: check what is in your bag");
