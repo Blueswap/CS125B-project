@@ -1,3 +1,7 @@
+/**
+ * The location class is used to encapsulate information about a single location in the game
+ */
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
