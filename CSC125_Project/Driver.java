@@ -196,7 +196,7 @@ public class Driver
     public static void helper()
     {
         System.out.println("quit : close the game");
-        System.out.println("go DIRECTION: move to another place" );
+        System.out.println("go DIRECTION: move to another place according to that direction" );
         System.out.println("look: displays the current location's description and items");
         System.out.println("examine NAME: examine a specific item");
         System.out.println("inventory: check what is in your bag");
