@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 public class ContainerItem extends Item
 {
@@ -34,23 +33,30 @@ public class ContainerItem extends Item
     }
 
     @Override
-    public String toString() {
+    public String toString() 
+    {
         StringBuilder containerDetails = new StringBuilder();
         containerDetails.append(getName());
         containerDetails.append(" [ ");
         containerDetails.append(getType());
         containerDetails.append(" ] : ");
         containerDetails.append(getDescription());
-        if(items == null){
+
+        if(items.size() == 0)
+        {
             containerDetails.append("\n");
             containerDetails.append("Your inventory is empty");
         }
-        else for(int i = 0; i <items.size(); i++)
+        else 
         {
-            containerDetails.append("\n");
-            containerDetails.append("+ ");
-            containerDetails.append(items.get(i).getName());
+            containerDetails.append(" that contains ");
+            for(int i = 0; i < items.size(); i++)
+            {
+                containerDetails.append("\n + ");
+                containerDetails.append(items.get(i).getName());
+            }
         }
+        
         return containerDetails.toString();
     }
 }
