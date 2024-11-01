@@ -4,12 +4,13 @@ public class Driver
 {
     // A static variable to track the player's current location in the game
     public static Location currLocation;
-    
+    public static ContainerItem myInventory;
+
     public static void main(String [] args)
     {
         // Creating the game world 
         createWorld();
-        
+        myInventory = new ContainerItem("Backpack", "Container", "An old brown backpack behind your back");
         // Create a Scanner object to read its data from the standard input stream
         Scanner read = new Scanner(System.in);
 
@@ -89,7 +90,7 @@ public class Driver
                     if (cmdLine.length > 1) // Check if the user specified an item to examine
                     {
                         // Check if the specified item exists in the current location
-                        if (currLocation.getItem(cmdLine[1]) == null) // item not found
+                        if (!currLocation.hasItem(cmdLine[1])) // item not found
                         {
                             System.out.println("Cannot find that item");
                         }
@@ -97,7 +98,7 @@ public class Driver
                         {
                             // print the item's detail
                             System.out.println(currLocation.getItem(cmdLine[1].toString()));
-                        } 
+                        }
                         
                     }
                     else // no specific item was provided
@@ -107,7 +108,55 @@ public class Driver
                     }
                     break;
                 }
-            
+
+                case "inventory":
+                {
+                    System.out.println(myInventory.toString());
+                    break;
+                }
+
+                case "take":
+                {
+                    if (cmdLine.length == 1)
+                    {
+                        System.out.println("Please specify the item you want to take.");
+                    }
+                    else
+                    {
+                        String item = cmdLine[1];
+                        if(currLocation.hasItem(item))
+                        {
+                            myInventory.addItem(currLocation.getItem(item));
+                            currLocation.removeItem(item);
+                        }
+                        else System.out.println("Cannot find that item here.");
+                    }
+                    break;
+                }
+
+                case "drop":
+                {
+                    if (cmdLine.length == 1)
+                    {
+                        System.out.println("Please specify the item you want to drop.");
+                    }
+                    else
+                    {
+                        String item = cmdLine[1];
+                        if(myInventory.hasItem(item))
+                        {
+                            currLocation.addItem(myInventory.removeItem(item));
+                        }
+                        else System.out.println("Cannot find that item in your inventory.");
+                    }
+                    break;
+                }
+
+                case "help":
+                {
+                    helper();
+                    break;
+                }
                 // Default case to handle unknown commands
                 default:
                 {
@@ -117,6 +166,19 @@ public class Driver
             }
         }
     }   
+    
+    
+    public static void helper()
+    {
+        System.out.println("quit : close the game");
+        System.out.println("go NAME: move to another place" );
+        System.out.println("look: displays the current location's description and items");
+        System.out.println("examine NAME: examine a specific item");
+        System.out.println("inventory: check what is in your bag");
+        System.out.println("take NAME: put an item from current location into your inventory");
+        System.out.println("drop NAME: leave an item from your inventory at the current location");
+    }
+    
     
     /**
      * Creates the game world by constructing and connecting locations.
@@ -183,4 +245,6 @@ public class Driver
         // Set the player's starting location to the kitchen
         currLocation = kitchen;
     }
+
+
 }
