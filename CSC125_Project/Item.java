@@ -1,3 +1,7 @@
+/**
+ * The item class is used to encapsulate information about an item in the game
+ */
+
 public class Item 
 {
     // Member variables
