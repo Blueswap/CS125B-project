@@ -1,7 +1,6 @@
 /**
  * The Driver class is the main driver for the text-based adventure game
- * It manages user commands, player movement, item interactions, and displays game world details
- * 
+ * It manages user commands, player movement, item interactions, and displays game world details 
  * @author Quyen Tran, Hung Nguyen, Nhi Do, Quynh Tran
  */
 
@@ -18,6 +17,10 @@ public class Driver
     {
         // Creating the game world 
         createWorld();
+
+        // Welcome message
+        System.out.println("Welcome to the Adventure Game! Type 'help' for a list of commands.");
+
         myInventory = new ContainerItem("Backpack", "Container", "An old brown backpack behind your back");
         // Create a Scanner object to read its data from the standard input stream
         Scanner read = new Scanner(System.in);
@@ -129,27 +132,113 @@ public class Driver
                 // It also remove that item from the current location
                 case "take":
                 {
-                    if (cmdLine.length == 1)
+                    if (cmdLine.length == 1) 
                     {
-                        System.out.println("Please specify the item you want to take.");
-                    }
-                    else
+                        System.out.println("You did not tell me what item you wanted to take.");
+                    } 
+                    else if (cmdLine.length == 2) 
                     {
-                        String item = cmdLine[1];
-                        if(currLocation.hasItem(item))
+                        if (!currLocation.hasItem(cmdLine[1])) 
                         {
-                            Item itemName = currLocation.getItem(item);
-                            myInventory.addItem(itemName);
-                            currLocation.removeItem(item);
-                            System.out.println("Now you have item: " + itemName.getName());
-                        }
-                        else
+                            System.out.println("Cannot find this item.");
+                        } 
+                        else 
                         {
-                            System.out.println("Cannot find that item here.");
+                            Item temp = currLocation.removeItem(cmdLine[1]);
+                            System.out.println("You now have " + temp.getName() + ".");
+                            myInventory.addItem(temp);
                         }
+                    } 
+                    else if (cmdLine.length == 3) 
+                    {
+                        if (cmdLine[2].equalsIgnoreCase("from")) 
+                        {
+                            System.out.println("You did not tell me where to take the item from.");
+                        } 
+                        else 
+                        {
+                            System.out.println("Invalid command. Did you mean 'take ___ from ___'?");
+                        }
+                    } 
+                    else if (cmdLine.length == 4) 
+                    {
+                        if (!cmdLine[2].equalsIgnoreCase("from")) 
+                        {
+                            System.out.println("Invalid command. Do you mean 'take ___ from ___'?");
+                        } 
+                        else if (!currLocation.hasItem(cmdLine[3])) 
+                        {
+                            System.out.println("Cannot find the container item.");
+                        } 
+                        else 
+                        {
+                            Item containerItem = currLocation.getItem(cmdLine[3]);
+                            if (containerItem instanceof ContainerItem) 
+                            {
+                                ContainerItem container = (ContainerItem) containerItem;
+                                if (!container.hasItem(cmdLine[1])) 
+                                {
+                                    System.out.println("The item you wanted to take cannot be found in here.");
+                                } 
+                                else 
+                                {
+                                    Item item = container.removeItem(cmdLine[1]);
+                                    System.out.println("You now have " + item.getName() + ".");
+                                    myInventory.addItem(item);
+                                }
+                            } 
+                            else 
+                            {
+                                System.out.println("The item you wanted to take from does not contain anything.");
+                            }
+                        }
+                    } 
+                    else 
+                    {
+                        System.out.println("Invalid command. Use 'take [item]' or 'take [item] from [container]'.");
                     }
                     break;
                 }
+
+                case "put":
+                {
+                    if (cmdLine.length == 1) {
+                        System.out.println("You did not tell me what item you wanted to put.");
+                    } 
+                    else if (cmdLine.length == 2) {
+                        System.out.println("You did not tell me where to put the item.");
+                    } 
+                    else if (cmdLine.length == 4 && cmdLine[2].equalsIgnoreCase("in")) {
+                        String itemName = cmdLine[1];
+                        String containerName = cmdLine[3];
+
+                        if (!currLocation.hasItem(containerName)) {
+                            System.out.println("Cannot find the container item.");
+                        } 
+                        else {
+                            Item containerItem = currLocation.getItem(containerName);
+                            if (containerItem instanceof ContainerItem) {
+                                ContainerItem container = (ContainerItem) containerItem;
+                                if (!myInventory.hasItem(itemName)) {
+                                    System.out.println("You do not have '" + itemName + "' in your inventory.");
+                                } 
+                                else {
+                                    Item item = myInventory.removeItem(itemName);
+                                    container.addItem(item);
+                                    System.out.println("You put the " + itemName + " in the " + containerName + ".");
+                                }
+                            } 
+                            else {
+                                System.out.println("The item '" + containerName + "' is not a container.");
+                            }
+                        }
+                    } 
+                    else {
+                        System.out.println("Invalid command. Use 'put [item] in [container]'.");
+                    }
+                    break;
+                }
+
 
                 // If the user types drop, it removes an item from the player's inventory and leave it at the current location
                 case "drop":
@@ -195,13 +284,16 @@ public class Driver
      */
     public static void helper()
     {
-        System.out.println("quit : close the game");
-        System.out.println("go DIRECTION: move to another place according to that direction" );
-        System.out.println("look: displays the current location's description and items");
-        System.out.println("examine NAME: examine a specific item");
-        System.out.println("inventory: check what is in your bag");
-        System.out.println("take NAME: put an item from current location into your inventory");
-        System.out.println("drop NAME: leave an item from your inventory at the current location");
+        System.out.println("Available commands:");
+        System.out.println("- quit: Exit the game.");
+        System.out.println("- go [DIRECTION]: Move to another place according to the specified direction (north, south, east, or west).");
+        System.out.println("- look: Display the current location's description and items.");
+        System.out.println("- examine [NAME]: Examine a specific item or container.");
+        System.out.println("- inventory: Check what is in your inventory.");
+        System.out.println("- take [NAME]: Take an item from the current location and add it to your inventory.");
+        System.out.println("- take [NAME] from [CONTAINER]: Take an item from a container and add it to your inventory.");
+        System.out.println("- put [NAME] in [CONTAINER]: Put an item from your inventory into a container.");
+        System.out.println("- drop [NAME]: Leave an item from your inventory at the current location.");
     }
     
     
@@ -226,6 +318,22 @@ public class Driver
         livingRoom.connect("north", bedroom);
         kitchen.connect("east", livingRoom);
         livingRoom.connect("west", kitchen);
+
+        // Add container items in different locations
+        ContainerItem chest = new ContainerItem("Chest", "Storage", "A wooden chest with intricate carvings");
+        chest.addItem(new Item("Key", "Tool", "An old, rusty key."));
+        chest.addItem(new Item("Map", "Tool", "A hand-drawn map of the area."));
+        livingRoom.addItem(chest);
+
+        ContainerItem desk = new ContainerItem("Desk", "Furniture", "A dusty desk with a locked drawer");
+        desk.addItem(new Item("Notebook", "Stationery", "A notebook filled with cryptic writings."));
+        desk.addItem(new Item("Pen", "Stationery", "A fountain pen with dried ink."));
+        bedroom.addItem(desk);
+
+        ContainerItem fridge = new ContainerItem("Fridge", "Appliance", "A fridge humming faintly, with its door slightly ajar");
+        fridge.addItem(new Item("Milk", "Food", "A bottle of spoiled milk."));
+        fridge.addItem(new Item("Apple", "Food", "An old, mushy apple you wouldn't want to eat."));
+        kitchen.addItem(fridge);
 
         // Add items in the kitchen
         Item knife = new Item("Knife", "Tool", "A kitchen knife with dry blood on its blade.");
@@ -270,6 +378,4 @@ public class Driver
         // Set the player's starting location to the kitchen
         currLocation = kitchen;
     }
-
-
 }
