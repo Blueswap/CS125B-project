@@ -330,8 +330,8 @@ public class Driver
         desk.addItem(new Item("Pen", "Stationery", "A fountain pen with dried ink."));
         bedroom.addItem(desk);
 
-        ContainerItem fridge = new ContainerItem("Fridge", "Appliance", "A fridge humming faintly, with its door slightly ajar");
-        fridge.addItem(new Item("Milk", "Food", "A bottle of spoiled milk."));
+        ContainerItem fridge = new ContainerItem("Fridge", "Appliance", "A fridge with its door slightly open");
+        fridge.addItem(new Item("Mango", "Food", "A sweet and juicy mango"));
         fridge.addItem(new Item("Apple", "Food", "An old, mushy apple you wouldn't want to eat."));
         kitchen.addItem(fridge);
 
