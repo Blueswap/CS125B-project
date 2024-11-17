@@ -320,17 +320,17 @@ public class Driver
         livingRoom.connect("west", kitchen);
 
         // Add container items in different locations
-        ContainerItem chest = new ContainerItem("Chest", "Storage", "A wooden chest with intricate carvings");
+        ContainerItem chest = new ContainerItem("Chest", "Container Item", "A wooden chest with intricate carvings");
         chest.addItem(new Item("Key", "Tool", "An old, rusty key."));
         chest.addItem(new Item("Map", "Tool", "A hand-drawn map of the area."));
         livingRoom.addItem(chest);
 
-        ContainerItem desk = new ContainerItem("Desk", "Furniture", "A dusty desk with a locked drawer");
+        ContainerItem desk = new ContainerItem("Desk", "Container Item", "A dusty desk with a locked drawer");
         desk.addItem(new Item("Notebook", "Stationery", "A notebook filled with cryptic writings."));
         desk.addItem(new Item("Pen", "Stationery", "A fountain pen with dried ink."));
         bedroom.addItem(desk);
 
-        ContainerItem fridge = new ContainerItem("Fridge", "Appliance", "A fridge with its door slightly open");
+        ContainerItem fridge = new ContainerItem("Fridge", "Container Item", "A fridge with its door slightly open");
         fridge.addItem(new Item("Mango", "Food", "A sweet and juicy mango"));
         fridge.addItem(new Item("Apple", "Food", "An old, mushy apple you wouldn't want to eat."));
         kitchen.addItem(fridge);
