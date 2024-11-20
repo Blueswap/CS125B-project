@@ -15,13 +15,14 @@ public class ContainerItem extends Item
 
     // Constructor
     /**
-     * Constructs a new ContainerItem object from name, type, and description inherits from Item class
+     * Constructs a new Item object from name, type, and description inherits from Item class
      * @param pName the name of the item inherits from Item class
      * @param pType the type of the item inherits from Item class
      * @param pDescription the description of the item inherits from Item class
      * Initializes an empty ArrayList to store items within the container.
      */
-    public ContainerItem(String pName, String pType, String pDescription){
+    public ContainerItem(String pName, String pType, String pDescription)
+    {
         super(pName, pType, pDescription);
         items = new ArrayList<Item>();
     }
@@ -69,6 +70,15 @@ public class ContainerItem extends Item
             }
         }
         return null;
+    }
+
+    public Item getItem(String itemName) {
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getName().equalsIgnoreCase(itemName)) {
+                return items.get(i);
+            }
+        }
+        return null; // Return null if the item is not found
     }
 
     /**
