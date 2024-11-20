@@ -101,25 +101,53 @@ public class Driver
                 {
                     if (cmdLine.length > 1) // Check if the user specified an item to examine
                     {
+                        String itemName = cmdLine[1]; // Item name to search for
+
                         // Check if the specified item exists in the current location
-                        if (!currLocation.hasItem(cmdLine[1])) // item not found
+                        if (currLocation.hasItem(itemName)) // Item found directly in the location
                         {
-                            System.out.println("Cannot find that item");
+                            // Print the item's details
+                            System.out.println(currLocation.getItem(itemName).toString());
                         }
-                        else // item found
+                        else 
                         {
-                            // print the item's detail
-                            System.out.println(currLocation.getItem(cmdLine[1].toString()));
+                            // Check if the item exists inside a container in the current location
+                            boolean foundInContainer = false;
+
+                            // Iterate through items in the current location
+                            for (int i = 0; i < currLocation.numItems(); i++)
+                            {
+                                Item item = currLocation.getItem(i); // Access item by index
+                                
+                                if (item instanceof ContainerItem) // Check if the item is a container
+                                {
+                                    ContainerItem container = (ContainerItem) item; // Cast to ContainerItem
+                                    
+                                    if (container.hasItem(itemName)) // Check if the container has the specified item
+                                    {
+                                        // Print the details of the item from the container
+                                        System.out.println(container.getItem(itemName).toString());
+                                        foundInContainer = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (!foundInContainer) // If the item wasn't found in any container
+                            {
+                                System.out.println("Cannot find that item");
+                            }
                         }
-                        
                     }
-                    else // no specific item was provided
+                    else // No specific item was provided
                     {
                         // Ask the user to enter an object name if none was provided
                         System.out.println("Please enter an object name to examine");
                     }
                     break;
                 }
+
+
 
                 // If the user types inventory, it shows items in player's inventory
                 case "inventory":
@@ -325,14 +353,14 @@ public class Driver
         chest.addItem(new Item("Map", "Tool", "A hand-drawn map of the area."));
         livingRoom.addItem(chest);
 
-        ContainerItem desk = new ContainerItem("Desk", "Container Item", "A dusty desk with a locked drawer");
+        ContainerItem desk = new ContainerItem("Desk", "Furniture", "A dusty desk with a locked drawer");
         desk.addItem(new Item("Notebook", "Stationery", "A notebook filled with cryptic writings."));
         desk.addItem(new Item("Pen", "Stationery", "A fountain pen with dried ink."));
         bedroom.addItem(desk);
 
         ContainerItem fridge = new ContainerItem("Fridge", "Container Item", "A fridge with its door slightly open");
-        fridge.addItem(new Item("Mango", "Food", "A sweet and juicy mango"));
-        fridge.addItem(new Item("Apple", "Food", "An old, mushy apple you wouldn't want to eat."));
+        fridge.addItem(new Item("Mango", "Food", "Inside the fridge. A sweet and juicy mango"));
+        fridge.addItem(new Item("Apple", "Food", "Inside the fridge. An old, mushy apple you wouldn't want to eat."));
         kitchen.addItem(fridge);
 
         // Add items in the kitchen
