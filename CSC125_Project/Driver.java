@@ -9,7 +9,11 @@ import java.util.ArrayList;
 
 public class Driver 
 {
-    // A static variable to track the player's current location in the game
+    // Member variables
+    /**
+     * currLocation: a static variable that tracks the player's current location in the game.
+     * myInventory: a static variable that represents the player's inventory (a container for storing items collected during the game).
+     */
     public static Location currLocation;
     public static ContainerItem myInventory;
 
@@ -147,8 +151,6 @@ public class Driver
                     break;
                 }
 
-
-
                 // If the user types inventory, it shows items in player's inventory
                 case "inventory":
                 {
@@ -156,21 +158,21 @@ public class Driver
                     break;
                 }
 
-                // If the user types take, it adds an item from the current location to the player's inventory
-                // It also remove that item from the current location
+                // If the user types take, it adds an item to the player's inventory
+                // It also remove that item from the current location/ container item
                 case "take":
                 {
-                    if (cmdLine.length == 1) 
+                    if (cmdLine.length == 1) // No item specified by the user
                     {
                         System.out.println("You did not tell me what item you wanted to take.");
                     } 
-                    else if (cmdLine.length == 2) 
+                    else if (cmdLine.length == 2) // for the case take [item]
                     {
-                        if (!currLocation.hasItem(cmdLine[1])) 
+                        if (!currLocation.hasItem(cmdLine[1])) // Item not found in the location
                         {
                             System.out.println("Cannot find this item.");
                         } 
-                        else 
+                        else // Item found in the location
                         {
                             Item temp = currLocation.removeItem(cmdLine[1]);
                             System.out.println("You now have " + temp.getName() + ".");
@@ -179,22 +181,22 @@ public class Driver
                     } 
                     else if (cmdLine.length == 3) 
                     {
-                        if (cmdLine[2].equalsIgnoreCase("from")) 
+                        if (cmdLine[2].equalsIgnoreCase("from"))  // user mentioned "from" but did not specify the container
                         {
                             System.out.println("You did not tell me where to take the item from.");
                         } 
-                        else 
+                        else // command format is incorrect
                         {
                             System.out.println("Invalid command. Did you mean 'take ___ from ___'?");
                         }
                     } 
-                    else if (cmdLine.length == 4) 
+                    else if (cmdLine.length == 4) // for the case take [item] from [container]
                     {
-                        if (!cmdLine[2].equalsIgnoreCase("from")) 
+                        if (!cmdLine[2].equalsIgnoreCase("from")) // command format is incorrect
                         {
                             System.out.println("Invalid command. Do you mean 'take ___ from ___'?");
                         } 
-                        else if (!currLocation.hasItem(cmdLine[3])) 
+                        else if (!currLocation.hasItem(cmdLine[3])) // command format is correct but item can't find container item
                         {
                             System.out.println("Cannot find the container item.");
                         } 
@@ -204,64 +206,79 @@ public class Driver
                             if (containerItem instanceof ContainerItem) 
                             {
                                 ContainerItem container = (ContainerItem) containerItem;
-                                if (!container.hasItem(cmdLine[1])) 
+                                if (!container.hasItem(cmdLine[1])) // can't find the item
                                 {
                                     System.out.println("The item you wanted to take cannot be found in here.");
                                 } 
-                                else 
+                                else // find the item
                                 {
                                     Item item = container.removeItem(cmdLine[1]);
                                     System.out.println("You now have " + item.getName() + ".");
                                     myInventory.addItem(item);
                                 }
                             } 
-                            else 
+                            else // Specified "container" is not actually a container
                             {
-                                System.out.println("The item you wanted to take from does not contain anything.");
+                                System.out.println("The item you wanted to take from is not a container item.");
                             }
                         }
                     } 
-                    else 
+                    else // Command is too long or improperly formatted
                     {
                         System.out.println("Invalid command. Use 'take [item]' or 'take [item] from [container]'.");
                     }
                     break;
                 }
 
+                // If the user types "put", this handles placing an item from the player's inventory into a container in the current location
                 case "put":
                 {
-                    if (cmdLine.length == 1) {
+                    if (cmdLine.length == 1) // No item specified by the user
+                    {
                         System.out.println("You did not tell me what item you wanted to put.");
                     } 
-                    else if (cmdLine.length == 2) {
+                    else if (cmdLine.length == 2) // No container specified by the user
+                    {
                         System.out.println("You did not tell me where to put the item.");
                     } 
-                    else if (cmdLine.length == 4 && cmdLine[2].equalsIgnoreCase("in")) {
+                    else if (cmdLine.length == 4 && cmdLine[2].equalsIgnoreCase("in")) // valid command
+                    {
                         String itemName = cmdLine[1];
                         String containerName = cmdLine[3];
 
-                        if (!currLocation.hasItem(containerName)) {
+                        if (!currLocation.hasItem(containerName)) // no container item was found
+                        {
                             System.out.println("Cannot find the container item.");
                         } 
-                        else {
+                        else // container item was found
+                        {
                             Item containerItem = currLocation.getItem(containerName);
-                            if (containerItem instanceof ContainerItem) {
+                            
+                            // check if it was a container item
+                            if (containerItem instanceof ContainerItem) 
+                            {
                                 ContainerItem container = (ContainerItem) containerItem;
-                                if (!myInventory.hasItem(itemName)) {
+                                
+                                // Check if the player has the specified item in their inventory
+                                if (!myInventory.hasItem(itemName)) // does not have the item
+                                {
                                     System.out.println("You do not have '" + itemName + "' in your inventory.");
                                 } 
-                                else {
+                                else // has the item
+                                {
                                     Item item = myInventory.removeItem(itemName);
                                     container.addItem(item);
                                     System.out.println("You put the " + itemName + " in the " + containerName + ".");
                                 }
                             } 
-                            else {
+                            else // not a container item
+                            {
                                 System.out.println("The item '" + containerName + "' is not a container.");
                             }
                         }
                     } 
-                    else {
+                    else // invalid command
+                    {
                         System.out.println("Invalid command. Use 'put [item] in [container]'.");
                     }
                     break;
