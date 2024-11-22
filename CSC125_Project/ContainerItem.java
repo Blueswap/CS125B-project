@@ -72,6 +72,12 @@ public class ContainerItem extends Item
         return null;
     }
 
+    /**
+     * This method retrieves and returns an item with the specified name from the container.
+     * 
+     * @param itemName The name of the item to retrieve (case-insensitive).
+     * @return The item if found, null if no item with the specified name exists.
+     */
     public Item getItem(String itemName) {
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).getName().equalsIgnoreCase(itemName)) {
@@ -100,7 +106,7 @@ public class ContainerItem extends Item
         if(items.size() == 0)
         {
             containerDetails.append("\n");
-            containerDetails.append("Your inventory is empty");
+            containerDetails.append("It is empty");
         }
         else 
         {
